@@ -25,14 +25,17 @@ def process_xml_file(file_path):
     soup = BeautifulSoup(xml_data, 'xml')
 
     for game in soup.find_all('game'):
+        print (f"Processing game: {game.find('name').text}")
         desc = game.find('desc')
         if desc and desc.text:
             try:
                 lang = detect(desc.text)
                 if lang != 'en':
+                    print (f"Detected non-English text: '{desc.text}'")
                     translated_text = translate_text_to_english(desc.text)
                     if translated_text:
                         desc.string.replace_with(translated_text)
+                        print(f"Translated to '{translated_text}'")
             except LangDetectException:
                 print("Language detection failed, skipping.")
     
